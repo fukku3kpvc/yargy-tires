@@ -2,7 +2,7 @@ import json
 import xlrd
 from yargy import Parser, rule, or_, and_, not_, forward
 from yargy.predicates import (
-    caseless, type, gram, normalized,
+    caseless, type as type_, gram, normalized,
     in_, in_caseless, dictionary, eq
 )
 from yargy.pipelines import caseless_pipeline, morph_pipeline
@@ -45,6 +45,8 @@ def test(rule_list, *tests):
     i = 0
     for line, etalon in tests:
         print(line)
+        tokenizer = MorphTokenizer()
+        print(list(tokenizer(line)))
         for rule_ in rule_list:
             parser = Parser(rule_)
             matches = list(parser.findall(line))
@@ -55,9 +57,11 @@ def test(rule_list, *tests):
                     facts_vendor = match.fact
                 elif i == 1:  # WIDTH
                     facts_width = match.fact
+                elif i == 2:  # PROFILE
+                    facts_profile = match.fact
                 i += 1
                 assert match, line
-        facts = Tire(vendor=facts_vendor, width=facts_width.width)
+        facts = Tire(vendor=facts_vendor, width=facts_width.width, profile=facts_profile.profile)
         print(facts)
         i = 0
         assert etalon == facts, facts
@@ -82,10 +86,11 @@ Vendor = fact(
 )
 
 SEP = in_({'-', '/', '|', ':', ';', '.'})
-INT = type('INT').interpretation(
-    interp.custom(int)
+NUM = type_('INT')
+INT = NUM.interpretation(interp.custom(int))
+FLOAT = rule(NUM.repeatable(), in_({',', '.'}), NUM, NUM.optional()).interpretation(
+    interp.custom(float)
 )
-FLOAT = rule(INT.repeatable(), in_({',', '.'}), INT, INT.optional())
 
 VENDORS_NAME, VENDORS_ID = get_vendor_dict(tires_vendors_path)
 VENDOR = rule(
@@ -104,10 +109,12 @@ VENDOR = rule(
 #     )
 # )
 
-WIDTH_PREF = {
-    'ширина:': 'ширина',
-    'Шир:': 'ширина'
-}
+STRUCTURE = rule(
+    or_(INT, FLOAT).interpretation(Tire.width), SEP,
+    or_(INT, FLOAT).interpretation(Tire.profile), SEP,
+    or_(INT, FLOAT)
+)
+
 WIDTH_PIPELINE = morph_pipeline([
     'шир',
     'ширина',
@@ -119,17 +126,28 @@ WIDTH = or_(
         WIDTH_PIPELINE, SEP,
         or_(INT, FLOAT).interpretation(Tire.width), SEP
     ),
+    STRUCTURE
+).interpretation(Tire)
+
+PROFILE_PIPELINE = morph_pipeline([
+    'проф',
+    'профиль',
+    'prof',
+    'profile'
+])
+PROFILE = or_(
     rule(
-        or_(INT, FLOAT).interpretation(Tire.width), SEP,
-        or_(INT, FLOAT), SEP, or_(INT, FLOAT)
-    )
+        PROFILE_PIPELINE, SEP,
+        or_(INT, FLOAT).interpretation(Tire.profile), SEP
+    ),
+    STRUCTURE
 ).interpretation(Tire)
 
 test(
-    [VENDOR, WIDTH],
-    [data_list[3], Tire(vendor=Vendor(name='HIFLY'), width=185)],
-    [data_list[0], Tire(vendor=Vendor(name='Bontyre'), width=33)],
-    [data_list[150], Tire(vendor=Vendor(name='Viatti'), width=195)]
+    [VENDOR, WIDTH, PROFILE],
+    [data_list[3], Tire(vendor=Vendor(name='HIFLY'), width=185, profile=60)],
+    [data_list[0], Tire(vendor=Vendor(name='Bontyre'), width=33, profile=12.5)],
+    [data_list[150], Tire(vendor=Vendor(name='Viatti'), width=195, profile=80)]
 )
 
 print()
