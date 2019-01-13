@@ -1,0 +1,682 @@
+[
+    {
+        "Id": 10000,
+        "Name": "Yokohama",
+        "Synonyms": [
+            "Yokohama",
+            "Йокохама"
+        ]
+    },
+    {
+        "Id": 10001,
+        "Name": "Toyo",
+        "Synonyms": [
+            "Toyo",
+            "Тойя"
+        ]
+    },
+    {
+        "Id": 10002,
+        "Name": "Kumho",
+        "Synonyms": [
+            "Kumho",
+            "Кумхо"
+        ]
+    },
+    {
+        "Id": 10003,
+        "Name": "Marshal",
+        "Synonyms": [
+            "Marshal",
+            "Маршал"
+        ]
+    },
+    {
+        "Id": 10004,
+        "Name": "Maxxis",
+        "Synonyms": [
+            "Maxxis",
+            "Максис"
+        ]
+    },
+    {
+        "Id": 10005,
+        "Name": "Michelin",
+        "Synonyms": [
+            "Michelin",
+            "Мишелин"
+        ]
+    },
+    {
+        "Id": 10006,
+        "Name": "Nokian Tyres",
+        "Synonyms": [
+            "Nokian Tyres",
+            "Nokian",
+            "Нокиан"
+        ]
+    },
+    {
+        "Id": 10007,
+        "Name": "Pirelli",
+        "Synonyms": [
+            "Pirelli",
+            "Пирелли"
+        ]
+    },
+    {
+        "Id": 10008,
+        "Name": "Sava",
+        "Synonyms": [
+            "Sava",
+            "Сава"
+        ]
+    },
+    {
+        "Id": 10009,
+        "Name": "Tigar",
+        "Synonyms": [
+            "Tigar",
+            "Тайгер"
+        ]
+    },
+    {
+        "Id": 10010,
+        "Name": "Dunlop",
+        "Synonyms": [
+            "Dunlop",
+            "Данлоп"
+        ]
+    },
+    {
+        "Id": 10011,
+        "Name": "Goodyear",
+        "Synonyms": [
+            "Goodyear",
+            "ГУД-ЕАР"
+        ]
+    },
+    {
+        "Id": 10012,
+        "Name": "GT-Radial",
+        "Synonyms": [
+            "GT-Radial"
+        ]
+    },
+    {
+        "Id": 10013,
+        "Name": "Hankook",
+        "Synonyms": [
+            "Hankook",
+            "Ханкук"
+        ]
+    },
+    {
+        "Id": 10014,
+        "Name": "Cooper",
+        "Synonyms": [
+            "Cooper"
+        ]
+    },
+    {
+        "Id": 10015,
+        "Name": "Aeolus",
+        "Synonyms": [
+            "Aeolus"
+        ]
+    },
+    {
+        "Id": 10016,
+        "Name": "Bridgestone",
+        "Synonyms": [
+            "Bridgestone",
+            "Бриджстоун"
+        ]
+    },
+    {
+        "Id": 10017,
+        "Name": "Zeetex",
+        "Synonyms": [
+            "Zeetex"
+        ]
+    },
+    {
+        "Id": 10018,
+        "Name": "Gislaved",
+        "Synonyms": [
+            "Gislaved",
+            "Гиславед"
+        ]
+    },
+    {
+        "Id": 10019,
+        "Name": "Matador",
+        "Synonyms": [
+            "Matador",
+            "Матадор"
+        ]
+    },
+    {
+        "Id": 10020,
+        "Name": "Continental",
+        "Synonyms": [
+            "Continental",
+            "Континенталь"
+        ]
+    },
+    {
+        "Id": 10022,
+        "Name": "Rial",
+        "Synonyms": [
+            "Rial"
+        ]
+    },
+    {
+        "Id": 10023,
+        "Name": "Sparco",
+        "Synonyms": [
+            "Sparco"
+        ]
+    },
+    {
+        "Id": 10024,
+        "Name": "Skad",
+        "Synonyms": [
+            "Skad"
+        ]
+    },
+    {
+        "Id": 10025,
+        "Name": "OZ Racing",
+        "Synonyms": [
+            "OZ Racing"
+        ]
+    },
+    {
+        "Id": 10026,
+        "Name": "Borbet",
+        "Synonyms": [
+            "Borbet"
+        ]
+    },
+    {
+        "Id": 10027,
+        "Name": "Fondmetal",
+        "Synonyms": [
+            "Fondmetal"
+        ]
+    },
+    {
+        "Id": 10028,
+        "Name": "MAK",
+        "Synonyms": [
+            "MAK"
+        ]
+    },
+    {
+        "Id": 10029,
+        "Name": "Alutec",
+        "Synonyms": [
+            "Alutec"
+        ]
+    },
+    {
+        "Id": 10030,
+        "Name": "Antera",
+        "Synonyms": [
+            "Antera"
+        ]
+    },
+    {
+        "Id": 10031,
+        "Name": "ATS",
+        "Synonyms": [
+            "ATS"
+        ]
+    },
+    {
+        "Id": 10032,
+        "Name": "BBS",
+        "Synonyms": [
+            "BBS"
+        ]
+    },
+    {
+        "Id": 10033,
+        "Name": "K&K",
+        "Synonyms": [
+            "K&K"
+        ]
+    },
+    {
+        "Id": 10034,
+        "Name": "Sailun",
+        "Synonyms": [
+            "Sailun"
+        ]
+    },
+    {
+        "Id": 10035,
+        "Name": "Contyre",
+        "Synonyms": [
+            "Contyre"
+        ]
+    },
+    {
+        "Id": 10036,
+        "Name": "Nankang",
+        "Synonyms": [
+            "Nankang"
+        ]
+    },
+    {
+        "Id": 10037,
+        "Name": "Federal",
+        "Synonyms": [
+            "Federal"
+        ]
+    },
+    {
+        "Id": 10038,
+        "Name": "Amtel",
+        "Synonyms": [
+            "Amtel",
+            "Амт",
+            "Амтел"
+        ]
+    },
+    {
+        "Id": 10039,
+        "Name": "Falken",
+        "Synonyms": [
+            "Falken",
+            "Фалкен"
+        ]
+    },
+    {
+        "Id": 10040,
+        "Name": "Nexen (Roadstone)",
+        "Synonyms": [
+            "Nexen (Roadstone)",
+            "Roadstone",
+            "NEXEN",
+            "Роудстоун"
+        ]
+    },
+    {
+        "Id": 10041,
+        "Name": "Kama",
+        "Synonyms": [
+            "Kama"
+        ]
+    },
+    {
+        "Id": 10042,
+        "Name": "Kama Euro",
+        "Synonyms": [
+            "Kama Euro"
+        ]
+    },
+    {
+        "Id": 10043,
+        "Name": "Triangle",
+        "Synonyms": [
+            "Triangle"
+        ]
+    },
+    {
+        "Id": 10045,
+        "Name": "Kapsen",
+        "Synonyms": [
+            "Kapsen",
+            "Капсен"
+        ]
+    },
+    {
+        "Id": 10046,
+        "Name": "BfGoodrich",
+        "Synonyms": [
+            "BfGoodrich",
+            "БФ гудрич"
+        ]
+    },
+    {
+        "Id": 10047,
+        "Name": "Forward",
+        "Synonyms": [
+            "Forward"
+        ]
+    },
+    {
+        "Id": 10048,
+        "Name": "AShK",
+        "Synonyms": [
+            "AShK"
+        ]
+    },
+    {
+        "Id": 10049,
+        "Name": "KirovskySHZ",
+        "Synonyms": [
+            "KirovskySHZ"
+        ]
+    },
+    {
+        "Id": 10050,
+        "Name": "VolzhskiySHZ",
+        "Synonyms": [
+            "VolzhskiySHZ"
+        ]
+    },
+    {
+        "Id": 10051,
+        "Name": "Tunga",
+        "Synonyms": [
+            "Tunga",
+            "Тунга"
+        ]
+    },
+    {
+        "Id": 10052,
+        "Name": "Nortec",
+        "Synonyms": [
+            "Nortec"
+        ]
+    },
+    {
+        "Id": 10053,
+        "Name": "Firestone",
+        "Synonyms": [
+            "Firestone",
+            "Файрстоун"
+        ]
+    },
+    {
+        "Id": 10054,
+        "Name": "Achilles",
+        "Synonyms": [
+            "Achilles"
+        ]
+    },
+    {
+        "Id": 10055,
+        "Name": "Fulda",
+        "Synonyms": [
+            "Fulda",
+            "Фулда"
+        ]
+    },
+    {
+        "Id": 10056,
+        "Name": "Rosava",
+        "Synonyms": [
+            "Rosava"
+        ]
+    },
+    {
+        "Id": 10057,
+        "Name": "YarShina",
+        "Synonyms": [
+            "YarShina"
+        ]
+    },
+    {
+        "Id": 10058,
+        "Name": "Doublestar",
+        "Synonyms": [
+            "Doublestar",
+            "ДаблСтар"
+        ]
+    },
+    {
+        "Id": 10059,
+        "Name": "Ovation",
+        "Synonyms": [
+            "Ovation"
+        ]
+    },
+    {
+        "Id": 10060,
+        "Name": "Nitto",
+        "Synonyms": [
+            "Nitto"
+        ]
+    },
+    {
+        "Id": 10061,
+        "Name": "Barum",
+        "Synonyms": [
+            "Barum",
+            "Барум"
+        ]
+    },
+    {
+        "Id": 10062,
+        "Name": "Aurora",
+        "Synonyms": [
+            "Aurora"
+        ]
+    },
+    {
+        "Id": 10063,
+        "Name": "Altenzo",
+        "Synonyms": [
+            "Altenzo"
+        ]
+    },
+    {
+        "Id": 10064,
+        "Name": "КШЗ",
+        "Synonyms": [
+            "КШЗ"
+        ]
+    },
+    {
+        "Id": 10065,
+        "Name": "Lassa",
+        "Synonyms": [
+            "Lassa",
+            "Ласса"
+        ]
+    },
+    {
+        "Id": 10066,
+        "Name": "Kingstar",
+        "Synonyms": [
+            "Kingstar"
+        ]
+    },
+    {
+        "Id": 10067,
+        "Name": "Avatyre",
+        "Synonyms": [
+            "Avatyre"
+        ]
+    },
+    {
+        "Id": 10068,
+        "Name": "Formula",
+        "Synonyms": [
+            "Formula",
+            "Формула"
+        ]
+    },
+    {
+        "Id": 10069,
+        "Name": "General",
+        "Synonyms": [
+            "General"
+        ]
+    },
+    {
+        "Id": 10070,
+        "Name": "Goodride",
+        "Synonyms": [
+            "Goodride"
+        ]
+    },
+    {
+        "Id": 10071,
+        "Name": "Kormoran",
+        "Synonyms": [
+            "Kormoran"
+        ]
+    },
+    {
+        "Id": 10072,
+        "Name": "Laufenn",
+        "Synonyms": [
+            "Laufenn"
+        ]
+    },
+    {
+        "Id": 10073,
+        "Name": "Nordman",
+        "Synonyms": [
+            "Nordman",
+            "Нордман"
+        ]
+    },
+    {
+        "Id": 10074,
+        "Name": "НК.ШЗ",
+        "Synonyms": [
+            "НК.ШЗ"
+        ]
+    },
+    {
+        "Id": 10075,
+        "Name": "Срш",
+        "Synonyms": [
+            "Срш"
+        ]
+    },
+    {
+        "Id": 10076,
+        "Name": "Cordiant",
+        "Synonyms": [
+            "Кордиант",
+            "Cordiant"
+        ]
+    },
+    {
+        "Id": 10077,
+        "Name": "Viatti",
+        "Synonyms": [
+            "Виатти",
+            "Viatti"
+        ]
+    },
+    {
+        "Id": 10078,
+        "Name": "КАМА",
+        "Synonyms": [
+            "КАМА"
+        ]
+    },
+    {
+        "Id": 10079,
+        "Name": "Bontyre",
+        "Synonyms": [
+            "Bontyre"
+        ]
+    },
+    {
+        "Id": 10080,
+        "Name": "SATOYA",
+        "Synonyms": [
+            "SATOYA"
+        ]
+    },
+    {
+        "Id": 10081,
+        "Name": "HIFLY",
+        "Synonyms": [
+            "HIFLY"
+        ]
+    },
+    {
+        "Id": 10082,
+        "Name": "LANDSAIL",
+        "Synonyms": [
+            "LANDSAIL"
+        ]
+    },
+    {
+        "Id": 10083,
+        "Name": "Белшина",
+        "Synonyms": [
+            "Белшина"
+        ]
+    },
+    {
+        "Id": 10084,
+        "Name": "Волж.ШЗ",
+        "Synonyms": [
+            "Волж.ШЗ"
+        ]
+    },
+    {
+        "Id": 10086,
+        "Name": "Кир.ШЗ",
+        "Synonyms": [
+            "Кир.ШЗ"
+        ]
+    },
+    {
+        "Id": 10087,
+        "Name": "Барн.ШЗ",
+        "Synonyms": [
+            "Барн.ШЗ"
+        ]
+    },
+    {
+        "Id": 10088,
+        "Name": "DEBICA",
+        "Synonyms": [
+            "DEBICA"
+        ]
+    },
+    {
+        "Id": 10089,
+        "Name": "АШК",
+        "Synonyms": [
+            "АШК"
+        ]
+    },
+    {
+        "Id": 10090,
+        "Name": "HABILEAD",
+        "Synonyms": [
+            "HABILEAD"
+        ]
+    },
+    {
+        "Id": 10091,
+        "Name": "LEAO/LINGLONG",
+        "Synonyms": [
+            "LEAO/LINGLONG"
+        ]
+    },
+    {
+        "Id": 10092,
+        "Name": "SUNFULL",
+        "Synonyms": [
+            "SUNFULL"
+        ]
+    },
+    {
+        "Id": 10093,
+        "Name": "Росава",
+        "Synonyms": [
+            "Росава"
+        ]
+    },
+    {
+        "Id": 10094,
+        "Name": "Омск.ШЗ",
+        "Synonyms": [
+            "Омск.ШЗ"
+        ]
+    }
+]
