@@ -1,14 +1,11 @@
 import json
 import xlrd
-from yargy import Parser, rule, or_, and_, not_, forward
-from yargy.predicates import (
-    caseless, type as type_, gram, normalized,
-    in_, in_caseless, dictionary, eq
-)
+from yargy import Parser, rule, or_
+from yargy.predicates import (type as type_, in_, dictionary, eq)
 from yargy.pipelines import caseless_pipeline, morph_pipeline
-from yargy.interpretation import fact, attribute
+from yargy.interpretation import fact
 from yargy import interpretation as interp
-from yargy.tokenizer import MorphTokenizer
+# from yargy.tokenizer import MorphTokenizer
 
 
 def get_vendor_dict(vendors_path):
@@ -41,40 +38,60 @@ def xls_to_list(path):
     return list_sheet
 
 
-def test(rule_list, *tests):
+def parse(rule_list, *tests):
+    facts_vendor = Vendor()
+    facts, facts_width, facts_profile, facts_diameter, facts_speed, facts_load, facts_season, facts_spikes = \
+        Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire()
     i = 0
-    for line, etalon in tests:
-        print(line)
-        for rule_ in rule_list:
-            parser = Parser(rule_)
-            matches = list(parser.findall(line))
-            print(len(matches))
-            if matches:
-                match = matches[0]
-                if i == 0:  # VENDOR
-                    facts_vendor = match.fact
-                elif i == 1:  # WIDTH
-                    facts_width = match.fact
-                elif i == 2:  # PROFILE
-                    facts_profile = match.fact
-                elif i == 3:  # DIAMETER
-                    facts_diameter = match.fact
-                elif i == 4:  # MAX_SPEED
-                    facts_speed = match.fact
-                elif i == 5:  # MAX_LOAD
-                    facts_load = match.fact
-                i += 1
-                assert match, line
-        facts = Tire(vendor=facts_vendor, width=facts_width.width, profile=facts_profile.profile,
-                     diameter=facts_diameter.diameter, max_speed_index=facts_speed.max_speed_index,
-                     max_load_index=facts_load.max_load_index)
-        print(facts)
-        assert etalon == facts, facts
-        # FACTS_TO_NONE_TYPE
-        facts_vendor = Vendor()
-        facts, facts_width, facts_profile, facts_diameter, facts_speed, facts_load = \
-            Tire(), Tire(), Tire(), Tire(), Tire(), Tire()
-        i = 0
+    for tests_list in tests:
+        for line in tests_list:
+            print(line)
+            for rule_ in rule_list:
+                parser = Parser(rule_)
+                matches = list(parser.findall(line))
+                print(len(matches))
+                if matches:
+                    match = matches[0]
+                    if i == 0:  # VENDOR
+                        facts_vendor = match.fact
+                        facts_vendor.id = VENDORS_ID[facts_vendor.name]
+                    elif i == 1:  # WIDTH
+                        facts_width = match.fact
+                    elif i == 2:  # PROFILE
+                        facts_profile = match.fact
+                    elif i == 3:  # DIAMETER
+                        facts_diameter = match.fact
+                    elif i == 4:  # MAX_SPEED
+                        facts_speed = match.fact
+                    elif i == 5:  # MAX_LOAD
+                        facts_load = match.fact
+                    elif i == 6:  # SEASON
+                        facts_season = match.fact
+                    elif i == 7:  # SPIKES
+                        facts_spikes = match.fact
+                    i += 1
+                    assert match, line
+                else:
+                    i += 1
+                    continue
+            facts = Tire(vendor=facts_vendor, width=facts_width.width, profile=facts_profile.profile,
+                         diameter=facts_diameter.diameter, max_speed_index=facts_speed.max_speed_index,
+                         max_load_index=facts_load.max_load_index, season=facts_season.season, spikes=facts_spikes.spikes)
+            print(facts)
+            # assert etalon == facts, facts
+            # FACTS_TO_NONE_TYPE
+            facts_vendor = Vendor()
+            facts, facts_width, facts_profile, facts_diameter, facts_speed, facts_load, facts_season, facts_spikes = \
+                Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire()
+            i = 0
+
+
+def to_float(string):
+    if string.split(','):
+        string = string.replace(',', '.')
+        return float(string)
+    else:
+        return float(string)
 
 
 tires_vendors_path = 'tires.vendors.json'
@@ -101,7 +118,7 @@ SEP = in_({'-', '/', '|', ':', ';', '.'})
 NUM = type_('INT')
 INT = NUM.interpretation(interp.custom(int))
 FLOAT = rule(NUM.repeatable(), in_({',', '.'}), NUM, NUM.optional()).interpretation(
-    interp.custom(float)
+    interp.custom(to_float)
 )
 
 # TIRE_VENDORS
@@ -213,7 +230,7 @@ MAX_SPEED_INDEX = or_(
 
 # TIRE_MAX_LOAD_INDEX
 MAX_LOAD = or_(
-    INT, rule(INT, eq('/'), INT)
+    INT, rule(NUM, eq('/'), NUM)
 )
 MAX_LOAD_INDEX = or_(
     rule(
@@ -224,14 +241,69 @@ MAX_LOAD_INDEX = or_(
     )
 ).interpretation(Tire)
 
-test(
-    [VENDOR, WIDTH, PROFILE, DIAMETER, MAX_SPEED_INDEX, MAX_LOAD_INDEX],
-    [data_list[3], Tire(vendor=Vendor(name='HIFLY'), width=185, profile=60, diameter=15,
-                        max_speed_index='T', max_load_index=84)],
-    [data_list[0], Tire(vendor=Vendor(name='Bontyre'), width=33, profile=12.5, diameter=15,
-                        max_speed_index='Q', max_load_index=108)],
-    [data_list[150], Tire(vendor=Vendor(name='Viatti'), width=195, profile=80, diameter=14,
-                          max_speed_index='C', max_load_index=None)]
-)
+# TIRE_SEASON
+SEASONS_PREFIX = morph_pipeline([
+    'сезон',
+    'season',
+    'сез',
+    'сезонность'
+])
+SEASONS = {
+    'лето': 'Summer',
+    'зима': 'Winter',
+    'летняя': 'Summer',
+    'зимняя': 'Winter',
+    'л': 'Summer',
+    'з': 'Winter',
+    'лз': 'Universal',
+    'всесезонная': 'Universal',
+    'winter': 'Winter',
+    'summer': 'Summer',
+    'W': 'Winter',
+    'S': 'Summer',
+    'WS': 'Universal'
+}
+SEASON = rule(
+    SEASONS_PREFIX, SEP, caseless_pipeline(SEASONS).interpretation(
+        Tire.season.normalized().custom(SEASONS.get)
+    )
+).interpretation(Tire)
 
-print()
+# TIRE_SPIKES
+SPIKES_PREFIX = morph_pipeline([
+    'шипы',
+    'шип',
+    'шипованная'
+    'spikes'
+])
+SPIKES_DICT = {
+    'да': 'True',
+    'нет': 'False',
+    'д': 'True',
+    'н': 'False',
+    'yes': 'True',
+    'no': 'False',
+    'y': 'True',
+    'n': 'False',
+    '+': 'True',
+    '-': 'False',
+    'true': 'True',
+    'false': 'False'
+}
+SPIKES = rule(
+    SPIKES_PREFIX, SEP,
+    caseless_pipeline(SPIKES_DICT).interpretation(
+        Tire.spikes.normalized().custom(SPIKES_DICT.get)
+    )
+).interpretation(Tire)
+
+parse(
+    [VENDOR, WIDTH, PROFILE, DIAMETER, MAX_SPEED_INDEX, MAX_LOAD_INDEX, SEASON, SPIKES],
+    # [data_list[146], Tire(vendor=Vendor(name='HIFLY'), width=185, profile=60, diameter=15,
+    #                       max_speed_index='T', max_load_index=84, season='Winter', spikes='True')],
+    # [data_list[10], Tire(vendor=Vendor(name='Bontyre'), width=33, profile=12.5, diameter=15,
+    #                      max_speed_index='Q', max_load_index=108, season='Summer', spikes='False')],
+    # [data_list[1990], Tire(vendor=Vendor(name='Viatti'), width=195, profile=80, diameter=14,
+    #                        max_speed_index='C', max_load_index=None, season='Winter', spikes='False')]
+    data_list
+)
