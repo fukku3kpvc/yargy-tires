@@ -5,6 +5,7 @@ from yargy.predicates import (type as type_, in_, dictionary, eq)
 from yargy.pipelines import caseless_pipeline, morph_pipeline
 from yargy.interpretation import fact
 from yargy import interpretation as interp
+from collections import OrderedDict
 # from yargy.tokenizer import MorphTokenizer
 
 
@@ -38,10 +39,15 @@ def xls_to_list(path):
     return list_sheet
 
 
+def show_json(data):
+    print(json.dumps(data, indent=2, ensure_ascii=False))
+
+
 def parse(rule_list, *tests):
+    JSON = []
     facts_vendor = Vendor()
-    facts, facts_width, facts_profile, facts_diameter, facts_speed, facts_load, facts_season, facts_spikes = \
-        Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire()
+    facts_width, facts_profile, facts_diameter, facts_speed, facts_load, facts_season, facts_spikes = \
+        Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire()
     i = 0
     for tests_list in tests:
         for line in tests_list:
@@ -50,11 +56,15 @@ def parse(rule_list, *tests):
                 parser = Parser(rule_)
                 matches = list(parser.findall(line))
                 print(len(matches))
+                # При объединении всех правил в одно общее -- метчинг не проходит, если структура строки хоть
+                # чуть-чуть изменится. Поэтому, метчинг происходит по каждому правилу отдельно для каждого параметра.
+                # Отсюда такая большая и некрасивая структура if-elif
                 if matches:
                     match = matches[0]
                     if i == 0:  # VENDOR
                         facts_vendor = match.fact
                         facts_vendor.id = VENDORS_ID[facts_vendor.name]
+                        facts_vendor._raw.attributes['id'] = VENDORS_ID[facts_vendor.name]
                     elif i == 1:  # WIDTH
                         facts_width = match.fact
                     elif i == 2:  # PROFILE
@@ -74,16 +84,57 @@ def parse(rule_list, *tests):
                 else:
                     i += 1
                     continue
-            facts = Tire(vendor=facts_vendor, width=facts_width.width, profile=facts_profile.profile,
-                         diameter=facts_diameter.diameter, max_speed_index=facts_speed.max_speed_index,
-                         max_load_index=facts_load.max_load_index, season=facts_season.season, spikes=facts_spikes.spikes)
-            print(facts)
+            if facts_width._raw is None:
+                i = 0
+                continue
+            if facts_vendor._raw is not None:
+                facts_width.vendor = facts_vendor
+                facts_width._raw.attributes['vendor'] = facts_vendor.as_json
+            else:
+                facts_width._raw.attributes['vendor'] = OrderedDict([('id', 'None'), ('name', 'None')])
+            # Последующие if-else конструкции -- опциональные, добавлены только для валидации None значений
+            # при конвертации в JSON формат. Как правило, этого делать не нужно, такие знач. опускаются
+
+            if facts_profile.profile is not None:
+                facts_width.profile = facts_profile.profile
+                facts_width._raw.attributes['profile'] = facts_profile.profile
+            else:
+                facts_width._raw.attributes['profile'] = 'None'
+            if facts_diameter.diameter is not None:
+                facts_width.diameter = facts_diameter.diameter
+                facts_width._raw.attributes['diameter'] = facts_diameter.diameter
+            else:
+                facts_width._raw.attributes['diameter'] = 'None'
+            if facts_speed.max_speed_index is not None:
+                facts_width.max_speed_index = facts_speed.max_speed_index
+                facts_width._raw.attributes['max_speed_index'] = facts_speed.max_speed_index
+            else:
+                facts_width._raw.attributes['max_speed_index'] = 'None'
+            if facts_load.max_load_index is not None:
+                facts_width.max_load_index = facts_load.max_load_index
+                facts_width._raw.attributes['max_load_index'] = facts_load.max_load_index
+            else:
+                facts_width._raw.attributes['max_load_index'] = 'None'
+            if facts_season.season is not None:
+                facts_width.season = facts_season.season
+                facts_width._raw.attributes['season'] = facts_season.season
+            else:
+                facts_width._raw.attributes['season'] = 'None'
+            if facts_spikes.spikes is not None:
+                facts_width.spikes = facts_spikes.spikes
+                facts_width._raw.attributes['spikes'] = facts_spikes.spikes
+            else:
+                facts_spikes.spikes = 'None'
+            show_json(facts_width.as_json)
+            JSON.append(facts_width.as_json)
             # assert etalon == facts, facts
+
             # FACTS_TO_NONE_TYPE
             facts_vendor = Vendor()
-            facts, facts_width, facts_profile, facts_diameter, facts_speed, facts_load, facts_season, facts_spikes = \
-                Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire()
+            facts_width, facts_profile, facts_diameter, facts_speed, facts_load, facts_season, facts_spikes = \
+                Tire(), Tire(), Tire(), Tire(), Tire(), Tire(), Tire()
             i = 0
+    return JSON
 
 
 def to_float(string):
@@ -94,9 +145,15 @@ def to_float(string):
         return float(string)
 
 
+def write_output(json_data):
+    with open('output_{}.json'.format(xls_path), 'w') as outfile:
+        json.dump(json_data, outfile, indent=2, ensure_ascii=False)
+
+
+# DATA
 tires_vendors_path = 'tires.vendors.json'
-xls_path = '06.07.18 ДАКАР Уфа.xls'
-# xls_path = 'Прайс_Колобокс_Шины_2018-07-07 (XLS).xls'
+# xls_path = '06.07.18 ДАКАР Уфа.xls'
+xls_path = 'Прайс_Колобокс_Шины_2018-07-07 (XLS).xls'
 data_list = xls_to_list(xls_path)
 
 # FACTS
@@ -135,16 +192,15 @@ VENDOR = rule(
 DIAMETER_WITH_LETTER = rule(
     NUM, or_(eq('С'), eq('C')).optional()
 )
-
 STRUCTURE = or_(
     rule(
-        or_(INT, FLOAT).interpretation(Tire.width), SEP,
-        or_(INT, FLOAT).interpretation(Tire.profile), SEP,
+        or_(INT, FLOAT), SEP,
+        or_(INT, FLOAT), SEP,
         or_(INT, DIAMETER_WITH_LETTER)
     ),
     rule(
-        or_(INT, FLOAT).interpretation(Tire.width), SEP,
-        or_(INT, FLOAT).interpretation(Tire.profile), eq('R'),
+        or_(INT, FLOAT), SEP,
+        or_(INT, FLOAT), eq('R'),
         or_(INT, DIAMETER_WITH_LETTER)
     )
 )
@@ -161,7 +217,18 @@ WIDTH = or_(
         WIDTH_PIPELINE, SEP,
         or_(INT, FLOAT).interpretation(Tire.width), SEP
     ),
-    STRUCTURE
+    or_(
+        rule(
+            or_(INT, FLOAT).interpretation(Tire.width), SEP,
+            or_(INT, FLOAT), SEP,
+            or_(INT, DIAMETER_WITH_LETTER)
+        ),
+        rule(
+            or_(INT, FLOAT).interpretation(Tire.width), SEP,
+            or_(INT, FLOAT), eq('R'),
+            or_(INT, DIAMETER_WITH_LETTER)
+        )
+    )
 ).interpretation(Tire)
 
 # TIRE_PROFILE
@@ -176,7 +243,18 @@ PROFILE = or_(
         PROFILE_PIPELINE, SEP,
         or_(INT, FLOAT).interpretation(Tire.profile), SEP
     ),
-    STRUCTURE
+    or_(
+        rule(
+            or_(INT, FLOAT), SEP,
+            or_(INT, FLOAT).interpretation(Tire.profile), SEP,
+            or_(INT, DIAMETER_WITH_LETTER)
+        ),
+        rule(
+            or_(INT, FLOAT), SEP,
+            or_(INT, FLOAT).interpretation(Tire.profile), eq('R'),
+            or_(INT, DIAMETER_WITH_LETTER)
+        )
+    )
 ).interpretation(Tire)
 
 # TIRE_DIAMETER
@@ -297,13 +375,9 @@ SPIKES = rule(
     )
 ).interpretation(Tire)
 
-parse(
+output = parse(
     [VENDOR, WIDTH, PROFILE, DIAMETER, MAX_SPEED_INDEX, MAX_LOAD_INDEX, SEASON, SPIKES],
-    # [data_list[146], Tire(vendor=Vendor(name='HIFLY'), width=185, profile=60, diameter=15,
-    #                       max_speed_index='T', max_load_index=84, season='Winter', spikes='True')],
-    # [data_list[10], Tire(vendor=Vendor(name='Bontyre'), width=33, profile=12.5, diameter=15,
-    #                      max_speed_index='Q', max_load_index=108, season='Summer', spikes='False')],
-    # [data_list[1990], Tire(vendor=Vendor(name='Viatti'), width=195, profile=80, diameter=14,
-    #                        max_speed_index='C', max_load_index=None, season='Winter', spikes='False')]
     data_list
 )
+
+write_output(output)
